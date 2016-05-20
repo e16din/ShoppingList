@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Список покупок</string>
+
+    <string name="hint_list_name">Название списка</string>
+    <string name="hint_product_name">Название продукта</string>
+    <string name="title_shopping">Списки покупок</string>
+    <string name="title_products">Покупки</string>
+</resources>

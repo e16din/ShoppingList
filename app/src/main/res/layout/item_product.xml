@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/lContainer"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="72dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_vertical"
+        android:text="Name"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/tvCheckDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="24dp"
+        android:text="Date"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#dedede"/>
+
+</RelativeLayout>
