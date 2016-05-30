@@ -9,15 +9,13 @@ import android.view.View;
 
 import com.e16din.alertmanager.AlertDialogCallback;
 import com.e16din.alertmanager.AlertManager;
-import com.e16din.datamanager.DataManager;
 import com.e16din.intentmaster.IntentMaster;
 import com.e16din.shoppinglist.R;
-import com.e16din.shoppinglist.TheApplication;
 import com.e16din.shoppinglist.model.Product;
 import com.e16din.shoppinglist.model.Product_Table;
 import com.e16din.shoppinglist.model.ShoppingList;
 import com.e16din.shoppinglist.screens.base.BaseActivity;
-import com.e16din.simplerecycleradapter.SimpleRecyclerAdapter;
+import com.e16din.simplerecycler.adapter.SimpleRecyclerAdapter;
 import com.raizlabs.android.dbflow.sql.language.CursorResult;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
@@ -65,7 +63,6 @@ public class ProductsActivity extends BaseActivity {
                 }
             });
             vRecycler.setAdapter(mAdapter);
-            addExampleProducts();
 
             vFab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,21 +86,10 @@ public class ProductsActivity extends BaseActivity {
                                                   @NonNull CursorResult<Product> tResult) {
                             final List<Product> products = tResult.toList();
 
-                            mAdapter.clear();
+                            mAdapter.clearAll();
                             mAdapter.addAll(0, products);
                         }
                     });
-        }
-    }
-
-    protected void addExampleProducts() {
-        //add items for example
-        if (DataManager.getInstance().loadBool(TheApplication.KEY_NEED_EXAMPLE)) {
-            addProduct("Молоко", DateTime.now().getMillis());
-            addProduct("Морковка");
-            addProduct("Чай");
-
-            DataManager.getInstance().save(TheApplication.KEY_NEED_EXAMPLE, false);
         }
     }
 
@@ -111,8 +97,8 @@ public class ProductsActivity extends BaseActivity {
         addProduct(name, 0);
     }
 
-    protected void addProduct(String молоко, long checked) {
-        Product item = new Product(молоко, DateTime.now().getMillis());
+    protected void addProduct(String name, long checked) {
+        Product item = new Product(name, DateTime.now().getMillis());
         item.setOwnerId(mShoppingList.getId());
         if (checked != 0) {
             item.setChecked(checked);

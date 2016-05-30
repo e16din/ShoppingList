@@ -13,10 +13,11 @@ import com.e16din.datamanager.DataManager;
 import com.e16din.intentmaster.IntentMaster;
 import com.e16din.shoppinglist.R;
 import com.e16din.shoppinglist.TheApplication;
+import com.e16din.shoppinglist.model.Product;
 import com.e16din.shoppinglist.model.ShoppingList;
 import com.e16din.shoppinglist.screens.base.BaseActivity;
 import com.e16din.shoppinglist.screens.products.ProductsActivity;
-import com.e16din.simplerecycleradapter.SimpleRecyclerAdapter;
+import com.e16din.simplerecycler.adapter.SimpleRecyclerAdapter;
 import com.raizlabs.android.dbflow.sql.language.CursorResult;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
@@ -54,6 +55,10 @@ public class ShoppingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        initAdapter();
+    }
+
+    public void initAdapter() {
         SQLite.select().from(ShoppingList.class).async()
                 .queryResultCallback(new QueryTransaction.QueryResultCallback<ShoppingList>() {
                     @Override
@@ -62,6 +67,7 @@ public class ShoppingActivity extends BaseActivity {
 
                         if (mAdapter == null) {
                             mAdapter = new RecyclerAdapter(ShoppingActivity.this, shoppingLists);
+
                             mAdapter.setOnItemClickListener(new SimpleRecyclerAdapter.OnItemClickListener<ShoppingList>() {
                                 @Override
                                 public void onClick(ShoppingList item, int position) {
@@ -69,11 +75,16 @@ public class ShoppingActivity extends BaseActivity {
                                             item);
                                 }
                             });
+
                             vRecycler.setAdapter(mAdapter);
 
                             //add item for example
                             if (DataManager.getInstance().loadBool(TheApplication.KEY_NEED_EXAMPLE)) {
-                                addShoppingList("Продукты");
+                                ShoppingList exampleList = addShoppingList("Продукты");
+
+                                addExampleProducts(exampleList);
+
+                                DataManager.getInstance().save(TheApplication.KEY_NEED_EXAMPLE, false);
                             }
 
                             vFab.setOnClickListener(new View.OnClickListener() {
@@ -90,16 +101,41 @@ public class ShoppingActivity extends BaseActivity {
                                 }
                             });
                         } else {
-                            mAdapter.clear();
-                            mAdapter.addAll(0, shoppingLists);
+                            mAdapter.clearAll();
+                            mAdapter.addAll(shoppingLists);
                         }
                     }
                 }).execute();
     }
 
-    private void addShoppingList(String name) {
+    private ShoppingList addShoppingList(String name) {
         ShoppingList item = new ShoppingList(name, DateTime.now().getMillis());
-        mAdapter.add(item);
+        mAdapter.addItem(item);
+        item.insert();
+        return item;
+    }
+
+    private void addExampleProducts(ShoppingList owner) {
+        //add items for example
+        if (DataManager.getInstance().loadBool(TheApplication.KEY_NEED_EXAMPLE)) {
+            addProduct(owner, "Молоко", DateTime.now().getMillis());
+            addProduct(owner, "Морковка");
+            addProduct(owner, "Чай");
+
+            DataManager.getInstance().save(TheApplication.KEY_NEED_EXAMPLE, false);
+        }
+    }
+
+    private void addProduct(ShoppingList owner, String name) {
+        addProduct(owner, name, 0);
+    }
+
+    private void addProduct(ShoppingList owner, String name, long checked) {
+        Product item = new Product(name, DateTime.now().getMillis());
+        item.setOwnerId(owner.getId());
+        if (checked != 0) {
+            item.setChecked(checked);
+        }
         item.insert();
     }
 }

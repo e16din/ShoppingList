@@ -6,10 +6,10 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
-import com.e16din.simplerecycleradapter.SimpleRecyclerAdapter;
-import com.e16din.simplerecycleradapter.SimpleViewHolder;
 import com.e16din.shoppinglist.R;
 import com.e16din.shoppinglist.model.Product;
+import com.e16din.simplerecycler.adapter.SimpleRecyclerAdapter;
+import com.e16din.simplerecycler.adapter.SimpleViewHolder;
 
 import org.joda.time.DateTime;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class RecyclerAdapter<T extends Product>
         extends SimpleRecyclerAdapter<RecyclerAdapter.ViewHolder, T> {
 
-    public RecyclerAdapter(@NonNull Context context, @NonNull List<T> items) {
+    public RecyclerAdapter(@NonNull Context context, @NonNull List items) {
         super(context, items, R.layout.item_product);
     }
 
@@ -31,7 +31,7 @@ public class RecyclerAdapter<T extends Product>
     protected void onBindItemViewHolder(ViewHolder holder, int position) {
         super.onBindItemViewHolder(holder, position);
 
-        final Product item = getItems().get(position);
+        final Product item = getItem(position);
 
         holder.tvName.setText(item.getName());
         if (item.getChecked() != 0) {

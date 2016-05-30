@@ -5,17 +5,17 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
-import com.e16din.simplerecycleradapter.SimpleRecyclerAdapter;
-import com.e16din.simplerecycleradapter.SimpleViewHolder;
 import com.e16din.shoppinglist.R;
 import com.e16din.shoppinglist.model.ShoppingList;
+import com.e16din.simplerecycler.adapter.SimpleRecyclerAdapter;
+import com.e16din.simplerecycler.adapter.SimpleViewHolder;
 
 import java.util.List;
 
 public class RecyclerAdapter<T extends ShoppingList>
         extends SimpleRecyclerAdapter<RecyclerAdapter.ViewHolder, T> {
 
-    public RecyclerAdapter(@NonNull Context context, @NonNull List<T> items) {
+    public RecyclerAdapter(@NonNull Context context, @NonNull List items) {
         super(context, items, R.layout.item_shopping_list);
     }
 
@@ -28,7 +28,7 @@ public class RecyclerAdapter<T extends ShoppingList>
     protected void onBindItemViewHolder(ViewHolder holder, int position) {
         super.onBindItemViewHolder(holder, position);
 
-        final ShoppingList item = getItems().get(position);
+        final ShoppingList item = getItem(position);
 
         holder.tvName.setText(item.getName());
     }
